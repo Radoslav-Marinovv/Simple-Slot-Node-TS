@@ -4,6 +4,6 @@ import * as slotMachineConfig from './configurations/configuration.js';
 const { reelsCount, rowsCount, symbols, lines, reels } =
   slotMachineConfig.default;
 
-const slot = new Slot(reelsCount, rowsCount);
+const slot = new Slot(reelsCount, rowsCount, symbols);
 
 console.log(slot.Spin());
