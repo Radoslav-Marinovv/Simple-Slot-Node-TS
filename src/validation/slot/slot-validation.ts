@@ -68,3 +68,19 @@ export const winingLinesValidation = (lines: number[][]): boolean => {
     return false;
   }
 };
+
+export const reelsValidation = (reels: number[][]): boolean => {
+  try {
+    if (reels.length < MINIMUM_REELS) {
+      throw new Error(
+        `🛑🛑🛑 Reels count should be greater than ${MINIMUM_REELS} 🛑🛑🛑\n\n`
+      );
+    }
+    return true;
+  } catch (error) {
+    error instanceof Error
+      ? console.error(error.message)
+      : console.error(error);
+    return false;
+  }
+};
