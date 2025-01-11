@@ -3,6 +3,7 @@ import {
   reelsCountValidation,
   rowsCountValidation,
   symbolsValuesValidation,
+  reelsValidation,
 } from '../validation/slot/slot-validation.js';
 
 export default class Slot {
@@ -10,17 +11,20 @@ export default class Slot {
   private _rowsCount: number | null = null;
   private _symbolsValues: object | null = null;
   private _winingLines: number[][] | null = null;
+  private _reels: number[][] | null = null;
 
   constructor(
     reelsCount: number,
     rowsCount: number,
     symbolsAndPrizes: object,
-    winingLines: number[][]
+    winingLines: number[][],
+    reels: number[][]
   ) {
     this.setReelsCount(reelsCount);
     this.setRowsCount(rowsCount);
     this.setSymbolsValues(symbolsAndPrizes);
     this.setWiningLines(winingLines);
+    this.setReels(reels);
   }
 
   public get reelsCount() {
@@ -37,6 +41,10 @@ export default class Slot {
 
   public get winingLines() {
     return this._winingLines;
+  }
+
+  public get reels() {
+    return this._reels;
   }
 
   private setReelsCount(reels: number) {
@@ -59,6 +67,11 @@ export default class Slot {
     this._winingLines = lines;
   }
 
+  private setReels(reels: number[][]) {
+    reelsValidation(reels);
+    this._reels = reels;
+  }
+
   public Spin() {
     return `Rows: ${this.rowsCount}
     \nReels: ${this.reelsCount}
@@ -71,6 +84,7 @@ export default class Slot {
     \nWining Lines: ${
       this.winingLines && `${this.winingLines?.map((line) => `\n${line}`)}`
     }
+    \nReels: ${this.reels && `${this.reels?.map((reel) => `\n\n${reel}`)}`}
     \ngame result`;
   }
 }
