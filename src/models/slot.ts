@@ -72,19 +72,49 @@ export default class Slot {
     this._reels = reels;
   }
 
+  // bet amount ???
+  // roll function (random number) reels 1 - 5 picker func to get the reel ✅
+  // check for wining lines
+  // payout
+
+  private generateRandomReelPositions(
+    reelsCount: number,
+    reels: number[][],
+    rowsCount: number
+  ) {
+    const randomNumbers = [];
+
+    for (let i = 0; i < reelsCount; i++) {
+      let allSelectedReelPositions = [];
+      let selectedReelPosition = Math.floor(Math.random() * reels[i].length);
+
+      for (let j = 0; j < rowsCount; j++) {
+        if (selectedReelPosition > reels[i].length) {
+          selectedReelPosition = 0;
+        }
+
+        allSelectedReelPositions.push(selectedReelPosition);
+        selectedReelPosition++;
+      }
+      randomNumbers.push(allSelectedReelPositions);
+    }
+
+    return randomNumbers;
+  }
+
   public Spin() {
-    return `Rows: ${this.rowsCount}
-    \nReels: ${this.reelsCount}
-    \nSymbols: ${
-      this.symbolsValues &&
-      `${Object.entries(this.symbolsValues).map((item) => {
-        return `\nSymbol ${item[0]}: ${item[1]}`;
-      })}`
-    }
-    \nWining Lines: ${
-      this.winingLines && `${this.winingLines?.map((line) => `\n${line}`)}`
-    }
-    \nReels: ${this.reels && `${this.reels?.map((reel) => `\n\n${reel}`)}`}
-    \ngame result`;
+    if (!this.reelsCount) return 'Reels count is not set';
+    if (!this.reels) return 'Reels are not set';
+    if (!this.rowsCount) return 'Rows count is not set';
+
+    const randomNumbers = this.generateRandomReelPositions(
+      this.reelsCount,
+      this.reels,
+      this.rowsCount
+    );
+
+    return `Random reel numbers: \n${randomNumbers
+      .map((reel) => reel.join(' '))
+      .join('\n')}`;
   }
 }
