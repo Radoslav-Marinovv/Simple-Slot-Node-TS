@@ -74,7 +74,7 @@ export default class Slot {
 
   // bet amount ???
   // roll function (random number) reels 1 - 5 picker func to get the reel ✅
-  // check for wining lines
+  // check for wining lines ✅
   // payout
 
   private generateRandomReelPositions(
@@ -93,7 +93,7 @@ export default class Slot {
           selectedReelPosition = 0;
         }
 
-        allSelectedReelPositions.push(selectedReelPosition);
+        allSelectedReelPositions.push(reels[i][selectedReelPosition]);
         selectedReelPosition++;
       }
       randomSpinResults.push(allSelectedReelPositions);
@@ -102,17 +102,49 @@ export default class Slot {
     return randomSpinResults;
   }
 
+  private checkForWinningLines(
+    reelPositions: number[][],
+    winingLines: number[][]
+  ) {
+    const slotWinResults: number[][] = [];
+
+    winingLines.forEach((line) => {
+      const lineResult = [];
+      let firstSymbol = reelPositions[0][line[0]];
+      for (let i = 0; i < reelPositions.length; i++) {
+        if (reelPositions[i][line[i]] !== firstSymbol) {
+          break;
+        }
+        lineResult.push(reelPositions[i][line[i]]);
+      }
+      slotWinResults.push(lineResult);
+    });
+    console.log(slotWinResults);
+
+    return slotWinResults;
+  }
+
   public Spin() {
-    if (!this.reelsCount) return 'Reels count is not set';
     if (!this.reels) return 'Reels are not set';
     if (!this.rowsCount) return 'Rows count is not set';
+    if (!this.reelsCount) return 'Reels count is not set';
+    if (!this.winingLines) return 'Wining lines are not set';
+    if (!this.symbolsValues) return 'Symbols values are not set';
 
     const reelPositions = this.generateRandomReelPositions(
       this.reelsCount,
       this.reels,
       this.rowsCount
     );
+    const winningLineResults = this.checkForWinningLines(
+      reelPositions,
+      this.winingLines
+    );
 
-    return reelPositions;
+    console.table(reelPositions);
+    winningLineResults.forEach((line) => {
+      console.log(`winning line: ${line}`);
+    });
+    console.log(`winning lines: ${winningLineResults}`);
   }
 }
