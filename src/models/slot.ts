@@ -1,3 +1,4 @@
+import { SymbolPayouts } from '../types/types.js';
 import {
   winingLinesValidation,
   reelsCountValidation,
@@ -9,14 +10,14 @@ import {
 export default class Slot {
   private _reelsCount: number | null = null;
   private _rowsCount: number | null = null;
-  private _symbolsValues: object | null = null;
+  private _symbolsValues: SymbolPayouts | null = null;
   private _winingLines: number[][] | null = null;
   private _reels: number[][] | null = null;
 
   constructor(
     reelsCount: number,
     rowsCount: number,
-    symbolsAndPrizes: object,
+    symbolsAndPrizes: SymbolPayouts,
     winingLines: number[][],
     reels: number[][]
   ) {
@@ -57,7 +58,7 @@ export default class Slot {
     this._rowsCount = rows;
   }
 
-  private setSymbolsValues(symbols: object) {
+  private setSymbolsValues(symbols: SymbolPayouts) {
     symbolsValuesValidation(symbols);
     this._symbolsValues = symbols;
   }
@@ -71,11 +72,6 @@ export default class Slot {
     reelsValidation(reels);
     this._reels = reels;
   }
-
-  // bet amount ???
-  // roll function (random number) reels 1 - 5 picker func to get the reel ✅
-  // check for wining lines ✅
-  // payout
 
   private generateRandomReelPositions(
     reelsCount: number,
@@ -119,17 +115,44 @@ export default class Slot {
       }
       slotWinResults.push(lineResult);
     });
-    console.log(slotWinResults);
 
     return slotWinResults;
   }
 
-  public Spin() {
-    if (!this.reels) return 'Reels are not set';
-    if (!this.rowsCount) return 'Rows count is not set';
-    if (!this.reelsCount) return 'Reels count is not set';
-    if (!this.winingLines) return 'Wining lines are not set';
-    if (!this.symbolsValues) return 'Symbols values are not set';
+  private calculateTotalWinnings(
+    winingLines: number[][],
+    symbolsValues: SymbolPayouts
+  ) {
+    let totalWinningAmount = 0;
+
+    winingLines.forEach((line, idx) => {
+      if (line.length > 1) {
+        console.log(
+          `winning line ${idx} and symbol: ${line[0]} x${line.length}, x${
+            symbolsValues[line[0]][line.length - 1]
+          }`
+        );
+        totalWinningAmount += symbolsValues[line[0]][line.length - 1];
+      }
+    });
+    console.log(`\nTotal winning amount: ${totalWinningAmount}`);
+
+    return totalWinningAmount;
+  }
+
+  public Spin(playerBalance: number, playerBet: number) {
+    if (!this.reels) throw new Error('Reels are not set');
+    if (!this.rowsCount) throw new Error('Rows count is not set');
+    if (!this.reelsCount) throw new Error('Reels count is not set');
+    if (!this.winingLines) throw new Error('Wining lines are not set');
+    if (!this.symbolsValues) throw new Error('Symbols values are not set');
+
+    let payoutAmount = 0;
+    let currentPlayerBalance = playerBalance;
+    console.log('🟢'.repeat(25));
+
+    console.log(`\nplayer balance: 💲${currentPlayerBalance}`);
+    console.log(`\nplayer bet: 💲${playerBet}\n`);
 
     const reelPositions = this.generateRandomReelPositions(
       this.reelsCount,
@@ -142,9 +165,26 @@ export default class Slot {
     );
 
     console.table(reelPositions);
-    winningLineResults.forEach((line) => {
-      console.log(`winning line: ${line}`);
-    });
-    console.log(`winning lines: ${winningLineResults}`);
+
+    const totalWinnings = this.calculateTotalWinnings(
+      winningLineResults,
+      this.symbolsValues
+    );
+
+    if (totalWinnings > 0) {
+      console.log('You won!');
+      currentPlayerBalance += playerBet * totalWinnings;
+      payoutAmount = playerBet * totalWinnings;
+    } else {
+      console.log('\nBetter luck next time!');
+      currentPlayerBalance -= playerBet;
+      payoutAmount -= playerBet;
+    }
+
+    console.log(`\nnew player balance: 💲${currentPlayerBalance}\n`);
+
+    console.log('🟢'.repeat(25));
+
+    return payoutAmount;
   }
 }
