@@ -172,7 +172,7 @@ export default class Slot {
     );
 
     if (totalWinnings > 0) {
-      console.log('You won!');
+      console.log('\nYou won!');
       currentPlayerBalance += playerBet * totalWinnings;
       payoutAmount = playerBet * totalWinnings;
     } else {
