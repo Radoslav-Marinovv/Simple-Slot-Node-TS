@@ -82,7 +82,7 @@ export default class Slot {
     reels: number[][],
     rowsCount: number
   ) {
-    const randomNumbers = [];
+    const randomSpinResults = [];
 
     for (let i = 0; i < reelsCount; i++) {
       let allSelectedReelPositions = [];
@@ -96,10 +96,10 @@ export default class Slot {
         allSelectedReelPositions.push(selectedReelPosition);
         selectedReelPosition++;
       }
-      randomNumbers.push(allSelectedReelPositions);
+      randomSpinResults.push(allSelectedReelPositions);
     }
 
-    return randomNumbers;
+    return randomSpinResults;
   }
 
   public Spin() {
