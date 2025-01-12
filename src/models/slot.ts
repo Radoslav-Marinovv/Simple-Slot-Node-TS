@@ -82,10 +82,12 @@ export default class Slot {
 
     for (let i = 0; i < reelsCount; i++) {
       let allSelectedReelPositions = [];
-      let selectedReelPosition = Math.floor(Math.random() * reels[i].length);
+      let selectedReelPosition = Math.floor(
+        Math.random() * (reels[i].length - 1)
+      );
 
       for (let j = 0; j < rowsCount; j++) {
-        if (selectedReelPosition > reels[i].length) {
+        if (selectedReelPosition > reels[i].length - 1) {
           selectedReelPosition = 0;
         }
 
@@ -135,7 +137,8 @@ export default class Slot {
         totalWinningAmount += symbolsValues[line[0]][line.length - 1];
       }
     });
-    console.log(`\nTotal winning amount: ${totalWinningAmount}`);
+    totalWinningAmount > 0 &&
+      console.log(`\nTotal winning multiplier: x${totalWinningAmount}`);
 
     return totalWinningAmount;
   }
