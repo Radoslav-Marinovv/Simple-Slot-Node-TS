@@ -6,4 +6,9 @@ const { reelsCount, rowsCount, symbols, lines, reels } =
 
 const slot = new Slot(reelsCount, rowsCount, symbols, lines, reels);
 
-slot.Spin();
+let playerBalance = 1000;
+let playerBet = 10;
+
+for (let i = 0; i < 3; i++) {
+  playerBalance += slot.Spin(playerBalance, playerBet);
+}
