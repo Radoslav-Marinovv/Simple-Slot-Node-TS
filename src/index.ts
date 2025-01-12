@@ -6,4 +6,4 @@ const { reelsCount, rowsCount, symbols, lines, reels } =
 
 const slot = new Slot(reelsCount, rowsCount, symbols, lines, reels);
 
-console.log(slot.Spin());
+console.table(slot.Spin());
