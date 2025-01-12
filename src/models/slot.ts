@@ -107,14 +107,12 @@ export default class Slot {
     if (!this.reels) return 'Reels are not set';
     if (!this.rowsCount) return 'Rows count is not set';
 
-    const randomNumbers = this.generateRandomReelPositions(
+    const reelPositions = this.generateRandomReelPositions(
       this.reelsCount,
       this.reels,
       this.rowsCount
     );
 
-    return `Random reel numbers: \n${randomNumbers
-      .map((reel) => reel.join(' '))
-      .join('\n')}`;
+    return reelPositions;
   }
 }
