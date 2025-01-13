@@ -79,24 +79,20 @@ export default class Slot {
     rowsCount: number
   ) {
     const randomSpinResults = [];
-
     for (let i = 0; i < reelsCount; i++) {
       let allSelectedReelPositions = [];
       let selectedReelPosition = Math.floor(
         Math.random() * (reels[i].length - 1)
       );
-
       for (let j = 0; j < rowsCount; j++) {
         if (selectedReelPosition > reels[i].length - 1) {
           selectedReelPosition = 0;
         }
-
         allSelectedReelPositions.push(reels[i][selectedReelPosition]);
         selectedReelPosition++;
       }
       randomSpinResults.push(allSelectedReelPositions);
     }
-
     return randomSpinResults;
   }
 
@@ -137,6 +133,7 @@ export default class Slot {
         totalWinningAmount += symbolsValues[line[0]][line.length - 1];
       }
     });
+
     totalWinningAmount > 0 &&
       console.log(`\nTotal winning multiplier: x${totalWinningAmount}`);
 
@@ -152,10 +149,6 @@ export default class Slot {
 
     let payoutAmount = 0;
     let currentPlayerBalance = playerBalance;
-    console.log('🟢'.repeat(25));
-
-    console.log(`\nplayer balance: 💲${currentPlayerBalance}`);
-    console.log(`\nplayer bet: 💲${playerBet}\n`);
 
     const reelPositions = this.generateRandomReelPositions(
       this.reelsCount,
@@ -167,6 +160,9 @@ export default class Slot {
       this.winingLines
     );
 
+    console.log('🟢'.repeat(25));
+    console.log(`\nplayer balance: 💲${currentPlayerBalance}`);
+    console.log(`\nplayer bet: 💲${playerBet}\n`);
     console.table(reelPositions);
 
     const totalWinnings = this.calculateTotalWinnings(
@@ -185,8 +181,7 @@ export default class Slot {
     }
 
     console.log(`\nnew player balance: 💲${currentPlayerBalance}\n`);
-
-    console.log('🟢'.repeat(25));
+    console.log('🟢'.repeat(25), '\n');
 
     return payoutAmount;
   }
